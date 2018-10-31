@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/football_logo.jpg'
-import sygnet from '../../assets/img/brand/sygnet.svg'
+import sygnet from '../../assets/img/brand/football_logo.jpg'
 
 const propTypes = {
   children: PropTypes.node,
@@ -27,11 +27,7 @@ class DefaultHeader extends Component {
         />
 
 
-        <Nav className="d-md-down-none" navbar>
-          <NavItem className="px-3">
-            <NavLink href="/">Dashboard</NavLink>
-          </NavItem>
-        </Nav>
+
         <Nav className="ml-auto" navbar>
           <NavItem className="d-md-down-none">
             <NavLink href="#"><i className="icon-location-pin"></i></NavLink>
