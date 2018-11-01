@@ -1,0 +1,6 @@
+{
+  "name": "Search_player",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Search_player.js"
+}

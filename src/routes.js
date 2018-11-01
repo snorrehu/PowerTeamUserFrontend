@@ -187,6 +187,18 @@ const Search = Loadable({
   loading: Loading,
 });
 
+const Search_player = Loadable({
+  loader: () => import('./views/Pages/Search_player'),
+  loading: Loading,
+});
+
+
+const Search_team = Loadable({
+  loader: () => import('./views/Pages/Search_team'),
+  loading: Loading,
+});
+
+
 
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
@@ -194,6 +206,8 @@ const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/search', exact: true, name: 'Search', component: Search },
+  { path: '/search_player', exact: true, name: 'Search_player', component: Search_player },
+  { path: '/search_team', exact: true, name: 'Search_team', component: Search_team },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },
   { path: '/theme/typography', name: 'Typography', component: Typography },

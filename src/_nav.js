@@ -11,6 +11,16 @@ export default {
       icon: 'icon-magnifier',
     },
     {
+      name: 'Search for a player',
+      url: '/search_player',
+      icon: 'icon-magnifier',
+    },
+    {
+      name: 'Search for a team',
+      url: '/search_team',
+      icon: 'icon-magnifier',
+    },
+    {
       name: 'Season Leaderboard',
       url: '/charts',
       icon: 'icon-pie-chart',
