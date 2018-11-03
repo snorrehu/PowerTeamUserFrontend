@@ -476,7 +476,11 @@ class Search_team extends Component {
       location_id: '',
       location_name: '',
       search_input: '',
-      teams: []
+      teamsRendered: [],
+      teams: [],
+      coachesRendered: [],
+      associationsRendered: [],
+      locationsRendered: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -572,44 +576,33 @@ class Search_team extends Component {
     console.log(this.state.location_name);
   }
 
-  async handleSubmit(event){
-    console.log("handleSubmit()");
-    event.preventDefault();
-
-    //Fetch team info:
-    await fetch('https://api-powerteam.herokuapp.com/teamsForUser/' + this.state.search_input,{
-      method:'GET',
-      headers:{
-        'Authorization': 'Basic ' + btoa('admin:adminPass'),
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    })
-      .then(teamRes=>teamRes.json())
-      .then((teamRes=>{
-        this.setState({
-          team_name: teamRes.team,
-          association_name: teamRes.association,
-          coach_name: teamRes.coach,
-          location_name: teamRes.location
-        });
-      }));
-    /*
-    await this.getAssociationInfo();
-    await this.getCoachInfo();
-    await this.getPersonInfo();
-    await this.getLocationInfo();
-    */
-    console.log(this.state.coach_name);
-    console.log(this.state.association_name);
-    console.log(this.state.location_name);
-    console.log(this.state.team_name);
-
+  clearState(){
+    this.setState ({
+      info: [],
+      association_info: [],
+      coach_info: [],
+      owner_info: [],
+      team_id: '',
+      team_name: '',
+      association_id: '',
+      association_name: '',
+      person_id: '',
+      coach_id: '',
+      coach_name: '',
+      location_id: '',
+      location_name: '',
+      teamsRendered: [],
+      teams: [],
+      coachesRendered: [],
+      associationsRendered: [],
+      locationsRendered: []
+    });
   }
 
-  async handleSubmit2(event){
+  async handleSubmit(event){
     console.log("handleSubmit2()");
     event.preventDefault();
+    this.clearState();
 
     await fetch('https://api-powerteam.herokuapp.com/teamsForUser/',{
       method:'GET',
@@ -622,17 +615,58 @@ class Search_team extends Component {
       .then(teamRes=>teamRes.json())
       .then((teamRes=>{
         this.setState({
-          teams: teamRes
+          teams: teamRes,
         });
       }));
+
     console.log(this.state.teams);
+
+    let search_input = this.state.search_input;
+    let team = '';
+
+    this.state.teams.forEach(function(team){
+      if((team["team"])==(search_input)){
+        console.log(team["team"]);
+        team = <ul>{team["team"]}</ul>;
+      }
+    });
+
+    this.state.teamsRendered = team;
+
+    console.log(this.state.teamsRendered);
   }
 
+  async handleSubmit2(event){
+    console.log("handleSubmit2()");
+    event.preventDefault();
+    document.getElementById("inputForm").reset();
+    this.clearState();
+
+    await fetch('https://api-powerteam.herokuapp.com/teamsForUser/',{
+      method:'GET',
+      headers:{
+        'Authorization': 'Basic ' + btoa('admin:adminPass'),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(teamRes=>teamRes.json())
+      .then((teamRes=>{
+        this.setState({
+          teams: teamRes,
+        });
+      }));
+
+    this.state.teamsRendered = this.state.teams.map((team) =>
+      <ul>{team["team"]}</ul>
+    );
+  }
 
   render(){
+
     return (
       <div className="animated fadeIn">
-        <form onSubmit={this.handleSubmit}>
+        <form id="inputForm" onSubmit={this.handleSubmit}>
           <label>
             <input type="text" name="name" value={this.state.value} onChange={this.handleChange} placeholder="Team name"/>
           </label>
@@ -651,7 +685,7 @@ class Search_team extends Component {
                 <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-dark">
                   <tr>
-                    <th className="text-center"></th>
+                    <th className="text-center">Team</th>
                     <th className="text-center">Association</th>
                     <th className="text-center">Coach</th>
                     <th className="text-center">Home</th>
@@ -661,7 +695,7 @@ class Search_team extends Component {
                   <tr>
                     <td className="text-center">
                       <div>
-
+                        {this.state.teamsRendered}
                       </div>
                     </td>
                     <td className="text-center">
