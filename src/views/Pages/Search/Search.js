@@ -482,8 +482,7 @@ class Search extends Component {
       <div className="animated fadeIn">
         <form>
           <label>
-            Location:
-            <input type="text" name="name" />
+            <input type="text" name="name" placeholder="Location" />
           </label>
           <input type="submit" value="Search" />
         </form>

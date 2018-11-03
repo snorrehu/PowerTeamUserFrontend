@@ -475,10 +475,13 @@ class Search_team extends Component {
       coach_name: '',
       location_id: '',
       location_name: '',
-      search_input: ''
+      search_input: '',
+      teams: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit2 = this.handleSubmit2.bind(this);
+
   }
 
   toggle() {
@@ -574,7 +577,7 @@ class Search_team extends Component {
     event.preventDefault();
 
     //Fetch team info:
-    await fetch('https://api-powerteam.herokuapp.com/search_teams/' + this.state.search_input,{
+    await fetch('https://api-powerteam.herokuapp.com/teamsForUser/' + this.state.search_input,{
       method:'GET',
       headers:{
         'Authorization': 'Basic ' + btoa('admin:adminPass'),
@@ -585,36 +588,58 @@ class Search_team extends Component {
       .then(teamRes=>teamRes.json())
       .then((teamRes=>{
         this.setState({
-          team_name: teamRes[0].name,
-          association_id: teamRes[0].association_id,
-          coach_id: teamRes[0].coach_id,
-          location_id: teamRes[0].location_id
+          team_name: teamRes.team,
+          association_name: teamRes.association,
+          coach_name: teamRes.coach,
+          location_name: teamRes.location
         });
       }));
     /*
-      .then(this.getAssociationInfo())
-      .then(this.getCoachInfo())
-      .then(this.getPersonInfo())
-      .then(this.getLocationInfo());
-      */
-
     await this.getAssociationInfo();
     await this.getCoachInfo();
     await this.getPersonInfo();
     await this.getLocationInfo();
+    */
+    console.log(this.state.coach_name);
+    console.log(this.state.association_name);
+    console.log(this.state.location_name);
     console.log(this.state.team_name);
+
   }
 
-  render() {
+  async handleSubmit2(event){
+    console.log("handleSubmit2()");
+    event.preventDefault();
 
+    await fetch('https://api-powerteam.herokuapp.com/teamsForUser/',{
+      method:'GET',
+      headers:{
+        'Authorization': 'Basic ' + btoa('admin:adminPass'),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(teamRes=>teamRes.json())
+      .then((teamRes=>{
+        this.setState({
+          teams: teamRes
+        });
+      }));
+    console.log(this.state.teams);
+  }
+
+
+  render(){
     return (
       <div className="animated fadeIn">
         <form onSubmit={this.handleSubmit}>
           <label>
-            Team name:
-            <input type="text" name="name" value={this.state.value} onChange={this.handleChange} />
+            <input type="text" name="name" value={this.state.value} onChange={this.handleChange} placeholder="Team name"/>
           </label>
           <input type="submit" value="Search"/>
+        </form>
+        <form onSubmit={this.handleSubmit2}>
+          <input type="submit" value="List all teams"></input>
         </form>
         <Row>
           <Col>
@@ -635,7 +660,9 @@ class Search_team extends Component {
                   <tbody>
                   <tr>
                     <td className="text-center">
-                      <div>{this.state.team_name}</div>
+                      <div>
+
+                      </div>
                     </td>
                     <td className="text-center">
                       <div>{this.state.association_name}</div>

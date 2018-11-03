@@ -455,9 +455,10 @@ class Search_player extends Component {
       name: '',
       team: '',
       position: '',
-
+      born: '',
+      person_id: '',
+      player_id: ''
     };
-
   }
 
 
@@ -474,9 +475,13 @@ class Search_player extends Component {
   }
 
   //Fetching and other stuff
-  componentDidMount(){
+  async handleSubmit(event){
+    /*
+    console.log("handleSubmit()");
+    event.preventDefault();
 
-    fetch('https://api-powerteam.herokuapp.com/players',{
+    //Fetch person  info:
+    await fetch('https://api-powerteam.herokuapp.com/search_person/' + this.state.search_input,{
       method:'GET',
       headers:{
         'Authorization': 'Basic ' + btoa('admin:adminPass'),
@@ -484,13 +489,22 @@ class Search_player extends Component {
         'Content-Type': 'application/json',
       }
     })
-      .then(res=>res.json())
-      .then(json=>{
+      .then(personRes=>personRes.json())
+      .then((personRes=>{
         this.setState({
-          isLoaded: true,
-          items: json
-        })
-      });
+          team_name: teamRes[0].name,
+          association_id: teamRes[0].association_id,
+          coach_id: teamRes[0].coach_id,
+          location_id: teamRes[0].location_id
+        });
+      }));
+    await this.getAssociationInfo();
+    await this.getCoachInfo();
+    await this.getPersonInfo();
+    await this.getLocationInfo();
+    console.log(this.state.team_name);
+    */
+
   }
 
 
@@ -512,8 +526,10 @@ class Search_player extends Component {
       <div className="animated fadeIn">
         <form name="search_player_form">
           <label>
-            Player name:
-            <input type="text" name="name" />
+            <input type="text" name="firstName" placeholder="First name"/>
+          </label>
+          <label>
+            <input type="text" name="lastName" placeholder="Last name"/>
           </label>
           <input type="submit" value="Search" />
         </form>
