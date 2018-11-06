@@ -94,9 +94,19 @@ class Search extends Component {
     return listGroupItems;
   }
 
+  renderTabPaneItems(){
+    let tabPaneItems = [];
+    for(let i = 0; i < this.state.locationForRendering.length; i++){
+      let tabPaneItemContent = [];
+      for(let j = 0; j < this.state.locationForRendering[i]["matches"].length;j++){
+        tabPaneItemContent.push(<p>{this.state.locationForRendering[i]["matches"][j]["date"]}: {this.state.locationForRendering[i]["matches"][j]["homeTeam"]} vs {this.state.locationForRendering[i]["matches"][j]["awayTeam"]}</p>);
+      }
+      tabPaneItems.push(<TabPane tabId={i}>{tabPaneItemContent}</TabPane>);
+    }
+    return tabPaneItems;
+  }
 
   render() {
-    console.log("Rendering")
 
     return (
       <div className="animated fadeIn">
@@ -122,7 +132,7 @@ class Search extends Component {
                   </Col>
                   <Col xs="8">
                     <TabContent activeTab={this.state.activeTab}>
-
+                      {this.renderTabPaneItems()}
                     </TabContent>
                   </Col>
                 </Row>
