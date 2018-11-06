@@ -198,11 +198,16 @@ const Search_team = Loadable({
   loading: Loading,
 });
 
+const Matches = Loadable({
+  loader: () => import('./views/Pages/Matches'),
+  loading: Loading,
+});
 
 
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
+  { path: '/matches:', exact: true, name: 'Matches', component: Matches },
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/search', exact: true, name: 'Search', component: Search },

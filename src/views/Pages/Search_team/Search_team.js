@@ -480,11 +480,12 @@ class Search_team extends Component {
       teams: [],
       coachesRendered: [],
       associationsRendered: [],
-      locationsRendered: []
+      locationsRendered: [],
+      teamsForRender: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleSubmit2 = this.handleSubmit2.bind(this);
+    this.handleFindAll = this.handleFindAll.bind(this);
 
   }
 
@@ -502,7 +503,6 @@ class Search_team extends Component {
 
   handleChange(event) {
     this.setState({search_input: event.target.value});
-    //console.log("handleChange()");
   }
 
   async getAssociationInfo(){
@@ -600,9 +600,8 @@ class Search_team extends Component {
   }
 
   async handleSubmit(event){
-    console.log("handleSubmit2()");
+    console.log("handleSubmit() started");
     event.preventDefault();
-    this.clearState();
 
     await fetch('https://api-powerteam.herokuapp.com/teamsForUser/',{
       method:'GET',
@@ -615,29 +614,29 @@ class Search_team extends Component {
       .then(teamRes=>teamRes.json())
       .then((teamRes=>{
         this.setState({
-          teams: teamRes,
+          teamsForRender: [],
+          teams: teamRes
+        });
+        let search_input = this.state.search_input;
+        let t = [];
+        this.state.teams.forEach(function(team){
+          if((team["team"])==(search_input)){
+            t.push(team);
+          }
+        });
+        this.setState({
+          teamsForRender: t
         });
       }));
 
-    console.log(this.state.teams);
+    console.log(this.state.teamsForRender);
+    console.log("handleSubmit() finished");
 
-    let search_input = this.state.search_input;
-    let team = '';
-
-    this.state.teams.forEach(function(team){
-      if((team["team"])==(search_input)){
-        console.log(team["team"]);
-        team = <ul>{team["team"]}</ul>;
-      }
-    });
-
-    this.state.teamsRendered = team;
-
-    console.log(this.state.teamsRendered);
   }
 
-  async handleSubmit2(event){
-    console.log("handleSubmit2()");
+
+  async handleFindAll(event){
+    console.log("handleSubmit2() started");
     event.preventDefault();
     document.getElementById("inputForm").reset();
     this.clearState();
@@ -653,16 +652,32 @@ class Search_team extends Component {
       .then(teamRes=>teamRes.json())
       .then((teamRes=>{
         this.setState({
-          teams: teamRes,
+          teamsForRender: teamRes
         });
       }));
 
-    this.state.teamsRendered = this.state.teams.map((team) =>
-      <ul>{team["team"]}</ul>
-    );
+    console.log("handleSubmit2() finished");
+
   }
 
   render(){
+    console.log("Rendering");
+
+    this.state.teamsRendered = this.state.teamsForRender.map((team) =>
+      <ul>{team["team"]}</ul>
+    );
+
+    this.state.associationsRendered = this.state.teamsForRender.map((team) =>
+      <ul>{team["association"]}</ul>
+    );
+
+    this.state.coachesRendered = this.state.teamsForRender.map((team) =>
+      <ul>{team["coach"]}</ul>
+    );
+
+    this.state.locationsRendered = this.state.teamsForRender.map((team) =>
+      <ul>{team["location"]}</ul>
+    );
 
     return (
       <div className="animated fadeIn">
@@ -672,9 +687,7 @@ class Search_team extends Component {
           </label>
           <input type="submit" value="Search"/>
         </form>
-        <form onSubmit={this.handleSubmit2}>
-          <input type="submit" value="List all teams"></input>
-        </form>
+        <button onClick={this.handleFindAll}>List all teams</button>
         <Row>
           <Col>
             <Card>
@@ -699,13 +712,13 @@ class Search_team extends Component {
                       </div>
                     </td>
                     <td className="text-center">
-                      <div>{this.state.association_name}</div>
+                      <div>{this.state.associationsRendered}</div>
                     </td>
                     <td className="text-center">
-                      <div>{this.state.coach_name}</div>
+                      <div>{this.state.coachesRendered}</div>
                     </td>
                     <td className="text-center">
-                      <div><a>{this.state.location_name}</a></div>
+                      <div><a>{this.state.locationsRendered}</a></div>
                     </td>
                   </tr>
                   </tbody>

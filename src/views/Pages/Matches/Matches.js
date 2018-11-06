@@ -158,14 +158,20 @@ class Search extends Component {
                 <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-dark">
                   <tr>
-                    <th className="text-center">Location</th>
+                    <th className="text-center"></th>
+                    <th className="text-center">Match Date</th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr>
                     <td className="text-center">
                       <div>
-                        {this.state.location_rendered}
+
+                      </div>
+                    </td>
+                    <td className="text-center">
+                      <div>
+
                       </div>
                     </td>
                   </tr>
@@ -176,7 +182,6 @@ class Search extends Component {
           </Col>
         </Row>
       </div>
-
     );
   }
 }
