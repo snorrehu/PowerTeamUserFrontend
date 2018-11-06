@@ -1,63 +1,18 @@
 import React, { Component } from 'react';
-import { Bar, Line } from 'react-chartjs-2';
-import {
-  Badge,
-  Button,
-  ButtonDropdown,
-  ButtonGroup,
-  ButtonToolbar,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Col,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Progress,
-  Row,
-  Table,
-} from 'reactstrap';
-
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
-
-
-function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-var elements = 27;
-var data1 = [];
-var data2 = [];
-var data3 = [];
-
-for (var i = 0; i <= elements; i++) {
-  data1.push(random(50, 200));
-  data2.push(random(80, 100));
-  data3.push(65);
-}
-
+import { Badge, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Row, TabContent, TabPane } from 'reactstrap';
 
 class Search extends Component {
+
   constructor(props) {
     super(props);
 
     this.toggle = this.toggle.bind(this);
-    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
-
     this.state = {
-      dropdownOpen: false,
-      radioSelected: 2,
+      activeTab: 1,
+      search_input: '',
       locationForRendering: [],
-      matchDate_rendered: [],
-      homeTeam_rendered: [],
-      awayTeam_rendered: [],
-      location_rendered: [],
-
-      locationsAsId: []
+      listGroupItems: [],
+      tabPanes: []
 
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -65,16 +20,12 @@ class Search extends Component {
     this.handleFindAllLocations = this.handleFindAllLocations.bind(this);
   }
 
-  toggle() {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-    });
-  }
-
-  onRadioBtnClick(radioSelected) {
-    this.setState({
-      radioSelected: radioSelected,
-    });
+  toggle(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
+    }
   }
 
   handleChange(event) {
@@ -125,26 +76,21 @@ class Search extends Component {
         console.log(this.state.locationForRendering);
       });
 
-    this.state.locationsAsId = this.state.locationForRendering.map((location)=>
-      location["name"]
-    );
-
     console.log("handleFindAllLocations() finished");
-  }
 
+  }
 
   render() {
 
-    this.state.location_rendered = this.state.locationForRendering.map((location)=>
-      <ul>{location["name"]}</ul>
+    this.state.listGroupItems = this.state.locationForRendering.map((locations)=>
+      <ListGroupItem onClick={() => this.toggle(0)} action active={this.state.activeTab === 0} ></ListGroupItem>
     );
-
 
     return (
       <div className="animated fadeIn">
-        <form name="search_location_form" onSubmit={this.handleSubmit}>
+        <form name="search_player_form" onSubmit={this.handleSubmit}>
           <label>
-            <input type="text" name="name" placeholder="Location" value={this.state.value} onChange={this.handleChange}/>
+            <input type="text" name="name" value={this.state.value} onChange={this.handleChange} placeholder="Location"/>
           </label>
           <input type="submit" value="Search" />
         </form>
@@ -152,31 +98,32 @@ class Search extends Component {
         <Row>
           <Col>
             <Card>
-              <CardHeader className="h3">
+              <CardHeader>
+                Locations
               </CardHeader>
               <CardBody>
-                <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-                  <thead className="thead-dark">
-                  <tr>
-                    <th className="text-center">Location</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td className="text-center">
-                      <div>
-                        {this.state.location_rendered}
-                      </div>
-                    </td>
-                  </tr>
-                  </tbody>
-                </Table>
+                <Row>
+                  <Col xs="4">
+                    <ListGroup id="list-tab" role="tablist">
+                      {this.state.listGroupItems}
+                    </ListGroup>
+                  </Col>
+                  <Col xs="8">
+                    <TabContent activeTab={this.state.activeTab}>
+                      <TabPane tabId={0} >
+                        <p>Velit aute mollit ipsum ad dolor consectetur nulla officia culpa adipisicing exercitation fugiat tempor. Voluptate deserunt sit sunt
+                          nisi aliqua fugiat proident ea ut. Mollit voluptate reprehenderit occaecat nisi ad non minim
+                          tempor sunt voluptate consectetur exercitation id ut nulla. Ea et fugiat aliquip nostrud sunt incididunt consectetur culpa aliquip
+                          eiusmod dolor. Anim ad Lorem aliqua in cupidatat nisi enim eu nostrud do aliquip veniam minim.</p>
+                      </TabPane>
+                    </TabContent>
+                  </Col>
+                </Row>
               </CardBody>
             </Card>
           </Col>
         </Row>
       </div>
-
     );
   }
 }
