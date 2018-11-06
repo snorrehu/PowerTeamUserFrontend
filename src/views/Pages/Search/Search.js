@@ -6,18 +6,22 @@ class Search extends Component {
   constructor(props) {
     super(props);
 
+    this.listGroupItems = [];
+    this.tabPanes = [];
+
     this.toggle = this.toggle.bind(this);
     this.state = {
       activeTab: 1,
       search_input: '',
       locationForRendering: [],
-      listGroupItems: [],
-      tabPanes: []
+      show_listGroupItems: this.listGroupItems,
+      show_tabPanes: this.tabPanes
 
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFindAllLocations = this.handleFindAllLocations.bind(this);
+    this.renderListGroupItems= this.renderListGroupItems.bind(this);
   }
 
   toggle(tab) {
@@ -49,7 +53,7 @@ class Search extends Component {
         this.setState({
           locationForRendering: res
         });
-        console.log(this.state.locationForRendering);
+        //console.log(this.state.locationForRendering);
       });
 
     console.log("handleSubmit() finished");
@@ -73,18 +77,26 @@ class Search extends Component {
         this.setState({
           locationForRendering: res
         });
-        console.log(this.state.locationForRendering);
+        //console.log(this.state.locationForRendering);
       });
 
     console.log("handleFindAllLocations() finished");
 
   }
 
-  render() {
+  renderListGroupItems(){
+    let listGroupItems = [];
 
-    this.state.listGroupItems = this.state.locationForRendering.map((locations)=>
-      <ListGroupItem onClick={() => this.toggle(0)} action active={this.state.activeTab === 0} ></ListGroupItem>
-    );
+    for(let i = 0; i < this.state.locationForRendering.length; i++){
+      listGroupItems.push(<ListGroupItem onClick={() => this.toggle(i)} action active={this.state.activeTab === i} >{this.state.locationForRendering[i]["name"]}</ListGroupItem>)
+    }
+    console.log(listGroupItems);
+    return listGroupItems;
+  }
+
+
+  render() {
+    console.log("Rendering")
 
     return (
       <div className="animated fadeIn">
@@ -105,17 +117,12 @@ class Search extends Component {
                 <Row>
                   <Col xs="4">
                     <ListGroup id="list-tab" role="tablist">
-                      {this.state.listGroupItems}
+                      {this.renderListGroupItems()}
                     </ListGroup>
                   </Col>
                   <Col xs="8">
                     <TabContent activeTab={this.state.activeTab}>
-                      <TabPane tabId={0} >
-                        <p>Velit aute mollit ipsum ad dolor consectetur nulla officia culpa adipisicing exercitation fugiat tempor. Voluptate deserunt sit sunt
-                          nisi aliqua fugiat proident ea ut. Mollit voluptate reprehenderit occaecat nisi ad non minim
-                          tempor sunt voluptate consectetur exercitation id ut nulla. Ea et fugiat aliquip nostrud sunt incididunt consectetur culpa aliquip
-                          eiusmod dolor. Anim ad Lorem aliqua in cupidatat nisi enim eu nostrud do aliquip veniam minim.</p>
-                      </TabPane>
+
                     </TabContent>
                   </Col>
                 </Row>
