@@ -46,18 +46,16 @@ class Register extends Component {
   }
 
   async saveNewUser(pswrd){
-    await fetch('https://api-powerteam.herokuapp.com/users', {
+    await fetch('https://testing-api-sh.herokuapp.com/users/sign-up', {
       method: 'POST',
       headers: {
-        'Authorization': 'Basic ' + btoa('admin:adminPass'),
-        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         user_name: this.state.search_input_userName,
         password: pswrd,
         admin_flag: "USER",
-        activity: true
+        active_flag: true
       })
     });
 

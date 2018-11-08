@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
-import Cookies from 'universal-cookie';
 
 
 class Login extends Component {
@@ -8,8 +7,17 @@ class Login extends Component {
   constructor(props){
     super(props);
 
-    this.routeChangeRegister = this.routeChangeRegister.bind(this);
+    this.state ={
+      user_name: '',
+      password: '',
+      token: []
+    };
 
+    this.routeChangeRegister = this.routeChangeRegister.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleChangePassword = this.handleChangePassword.bind(this);
+    this.handleChangeUserName = this.handleChangeUserName.bind(this);
+    this.routeChangeLogin = this.routeChangeLogin.bind(this);
   }
 
   routeChangeRegister(){
@@ -18,11 +26,56 @@ class Login extends Component {
   }
 
   routeChangeLogin(){
-    /* Set cookies!!
-    document.cookie = "userName=" + this.state.search_input_userName;
-    document.cookie = "password=" + this.state.search_input_password1;
-    */
+    let path = 'dashboard';
+    this.props.history.push(path);
   }
+
+  handleChangePassword(event) {
+    this.setState({password: event.target.value});
+  }
+
+  handleChangeUserName(event) {
+    this.setState({user_name: event.target.value});
+  }
+
+  async handleLogin() {
+
+    const {
+      user_name,
+      password,
+    } = this.state;
+
+    try {
+      const res = await fetch('https://testing-api-sh.herokuapp.com/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_name,
+          password,
+        }),
+      });
+
+      let token = res.headers.get("Authorization");
+      console.log(token);
+      if(token==null){
+        alert("Wrong username/password! Please try again.");
+      }
+      else{
+        localStorage.setItem("jwt", token);
+        this.routeChangeLogin();
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+
+  }
+
+
 
   render() {
     return (
@@ -42,7 +95,7 @@ class Login extends Component {
                             <i className="icon-user"></i>
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input type="text" placeholder="Username" autoComplete="username" />
+                        <Input type="text" placeholder="Username" autoComplete="username" value={this.state.value} onChange={this.handleChangeUserName}/>
                       </InputGroup>
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
@@ -50,11 +103,11 @@ class Login extends Component {
                             <i className="icon-lock"></i>
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input type="password" placeholder="Password" autoComplete="current-password" />
+                        <Input type="password" placeholder="Password" autoComplete="current-password" value={this.state.value} onChange={this.handleChangePassword}/>
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="primary" className="px-4" onClick={this.routeChangeLogin}>Login</Button>
+                          <Button color="primary" className="px-4" onClick={this.handleLogin}>Login</Button>
                         </Col>
                         <Col xs="6" className="text-right">
                           <Button color="primary" className="px-0">Administrator</Button>

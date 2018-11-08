@@ -47,6 +47,8 @@ class Search_team extends Component {
   constructor(props) {
     super(props);
 
+
+
     this.toggle = this.toggle.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
 
@@ -78,6 +80,10 @@ class Search_team extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleFindAll = this.handleFindAll.bind(this);
+    this.routeChangeLogin = this.routeChangeLogin.bind(this);
+    if(localStorage.getItem("jwt")==null){
+      return this.routeChangeLogin();
+    }
 
   }
 
@@ -252,7 +258,13 @@ class Search_team extends Component {
 
   }
 
+  routeChangeLogin(){
+    let path = 'login';
+    this.props.history.push(path);
+  }
+
   render(){
+
     console.log("Rendering");
 
     this.state.teamsRendered = this.state.teamsForRender.map((team) =>

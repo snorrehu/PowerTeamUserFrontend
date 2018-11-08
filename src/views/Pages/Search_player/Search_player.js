@@ -45,6 +45,7 @@ class Search_player extends Component {
   constructor(props) {
     super(props);
 
+
     this.toggle = this.toggle.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
 
@@ -66,6 +67,17 @@ class Search_player extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFindAllPlayers = this.handleFindAllPlayers.bind(this);
+    this.routeChangeLogin = this.routeChangeLogin.bind(this);
+
+    if(localStorage.getItem("jwt")==null){
+      return this.routeChangeLogin();
+    }
+
+  }
+
+  routeChangeLogin(){
+    let path = 'login';
+    this.props.history.push(path);
   }
 
 

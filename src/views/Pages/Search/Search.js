@@ -22,6 +22,15 @@ class Search extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleFindAllLocations = this.handleFindAllLocations.bind(this);
     this.renderListGroupItems= this.renderListGroupItems.bind(this);
+    this.routeChangeLogin = this.routeChangeLogin.bind(this);
+    if(localStorage.getItem("jwt")==null){
+      return this.routeChangeLogin();
+    }
+  }
+
+  routeChangeLogin(){
+    let path = 'login';
+    this.props.history.push(path);
   }
 
   toggle(tab) {
