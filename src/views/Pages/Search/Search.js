@@ -108,7 +108,8 @@ class Search extends Component {
     for(let i = 0; i < this.state.locationForRendering.length; i++){
       let tabPaneItemContent = [];
       for(let j = 0; j < this.state.locationForRendering[i]["matches"].length;j++){
-        tabPaneItemContent.push(<p>{this.state.locationForRendering[i]["matches"][j]["date"]}: {this.state.locationForRendering[i]["matches"][j]["homeTeam"]} vs {this.state.locationForRendering[i]["matches"][j]["awayTeam"]}</p>);
+        tabPaneItemContent.push(<p>{this.state.locationForRendering[i]["matches"][j]["date"]}: {this.state.locationForRendering[i]["matches"][j]["homeTeam"]} {this.state.locationForRendering[i]["matches"][j]["homeTeamScore"]} / {this.state.locationForRendering[i]["matches"][j]["awayTeamScore"]} {this.state.locationForRendering[i]["matches"][j]["awayTeam"]}</p>);
+
       }
       tabPaneItems.push(<TabPane tabId={i}>{tabPaneItemContent}</TabPane>);
     }
